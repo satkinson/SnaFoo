@@ -25,7 +25,7 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 
-    <link rel="stylesheet" href="@Url.Content("assets/styles/modern.css")" />
+    <link rel="stylesheet" media="screen, projection"  href="@Url.Content("../assets/styles/modern.css")" />
 </head>
 <body>
     <div class="masthead" role="banner">
@@ -50,10 +50,12 @@
         </div>
     </div>
     <div class="container body-content">
-        @RenderBody()
+        <div class="wrapper">
+            @RenderBody()
+        </div>
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+            <p>&copy; @DateTime.Now.Year - Scott Atkinson (NAT)</p>
         </footer>
     </div>
 
