@@ -14,14 +14,19 @@
                 <h2 class="hdg hdg_3">Votes Remaining</h2>
             </div>
             <div class="voteBox-body">
-                <p class="counter counter_green isHidden">3</p>
-                <p class="counter counter_yellow">2</p>
-                <p class="counter counter_red isHidden">1</p>
+                <p class="counter" data-bind="
+                        text:numOfVotes,
+                        css:{
+                            counter_green: numOfVotes() == 3, 
+                            counter_yellow:numOfVotes()==2, 
+                            counter_red:numOfVotes()==1,
+                            isHidden:numOfVotes()==0
+                        }">3</p>
             </div>
         </div>
     </div>
     <div class="shelf shelf_2">
-        <p class="error isHidden">Opps! You have already voted the total allowed times this month.<br />Come back next month to vote again!</p>
+        <p class="error" data-bind="css:{isHidden:numOfVotes()>0}">Opps! You have already voted the total allowed times this month.<br />Come back next month to vote again!</p>
     </div>
     <div class="split">
         <div class="shelf shelf_2">
@@ -73,6 +78,7 @@
 
             var self = this;
 
+            self.numOfVotes = ko.observable(3);
             self.alwaysOrdered = ko.observableArray([]);
             self.optionalOrdered = ko.observableArray([]);
 
@@ -87,6 +93,16 @@
                     dataType: "json",
                     success: function (data) {
                         console.log('post success : ', data);
+
+                        var rawvotedIds = $.cookie("natVotes");
+                        if (rawvotedIds === undefined) {
+                            $.cookie("natVotes", snack.id , { expires: 30 });
+                        }
+                        else {
+                            $.cookie("natVotes", rawvotedIds + "," + snack.id, { expires: 30 });
+                        }
+
+                        window.location.reload(true); //TODO : resolve reload issue with observables instead of reload
                     }
                 });
 
@@ -108,6 +124,16 @@
                 var snacks = result1[0];
                 var suggestions = result2[0];
                 var votes = result3[0];
+
+                var rawvotedIds = $.cookie("natVotes");
+                console.log('natvotes : ', rawvotedIds);
+                var voteIds = [];
+                if (rawvotedIds && rawvotedIds.length > 0)
+                {
+                    voteIds = rawvotedIds.split(',');
+                    console.log('voteids : ', voteIds)
+                    self.numOfVotes(3 - voteIds.length);
+                }
             
                 for (var i = 0; i < snacks.length; i++) {
                     if (!snacks[i].optional) {
@@ -118,6 +144,7 @@
                         //month can be added to the vote list.
                         
                         snacks[i].voteCount = _.where(votes, { SnackId: snacks[i].id }).length; //TODO: only count votes fr the month being displayed
+
                         self.optionalOrdered.push(snacks[i]);
                     }
                 }

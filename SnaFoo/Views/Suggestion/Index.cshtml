@@ -70,22 +70,23 @@
                 contentType: "application/json",
                 dataType: "json",
                 success: function (data) {
-                    console.log('post success : ', data);
+                    saveSuggestion(data.id);
+
                 }
             });
 
         };
 
-        var saveSuggestion = function (snack) {
-            console.log('save sugg : ', snack())
+        var saveSuggestion = function (snackId) {
+            
             $.ajax({
                 url: "/api/SuggestionAPI",
                 type: "POST",
-                data: '"' + snack().id + '"',
+                data: '"' + snackId + '"',
                 contentType: "application/json",
                 dataType: "json",
                 success: function (data) {
-                    console.log('post success : ', data);
+                    window.location.replace("/");
                 }
             });
 
@@ -103,7 +104,7 @@
                     //window.location.replace("/");
                 }
                 else {
-                    saveSuggestion(this.selectedOptional);
+                    saveSuggestion(this.selectedOptional().id);
                     //window.location.replace("/");
                 }
             }
@@ -124,7 +125,7 @@
 
 
             for (var i = 0; i < snacks.length; i++) {
-                if (snacks[i].optional) { //TODO : remove snacks already suggested for the next month
+                if (snacks[i].optional && _.where(suggestions, { SnackId : snacks[i].id}).length < 1) { //TODO : remove snacks already suggested for the next month - add the date restriction
                     model.snackOptions.push(snacks[i]);
                 }
             }
