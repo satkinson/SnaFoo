@@ -85,6 +85,7 @@
             self.vote = function (snack) {
                 console.log('vote for snack : ', snack);
 
+                //rewrite with promises to remove nesting
                 $.ajax({
                     url: "/api/VoteAPI",
                     type: "POST",

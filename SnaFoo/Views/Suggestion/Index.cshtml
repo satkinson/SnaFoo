@@ -61,6 +61,10 @@
 @section scripts {
     <script type="text/javascript">
 
+        //TOSO: refactor with promises to remove nesting of ajax calls
+
+        //Suggested Refactor : for future creation etc should probably be done on server side so model validation etc can be leveraged... but using agile it was
+        //faster to get working this way.
         var createNew = function (model) {
 
             $.ajax({
@@ -116,9 +120,6 @@
             $.getJSON("/api/SuggestionAPI")
 
         ).done(function (result1, result2) {
-
-            console.log('data loaded : ', result1[0]);
-            console.log('suggestions : ', result2[0]);
 
             var snacks = result1[0];
             var suggestions = result2[0];
