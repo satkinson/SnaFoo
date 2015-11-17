@@ -52,7 +52,7 @@
                         <input type="text" placeholder="Location" class="" data-bind="value:newSnackLocation"/>
                     </div>
                 </fieldset>
-                <input type="button"  value="Suggest this Snack!" class="btn" data-bind="click:createNew">
+                <input type="button"  value="Suggest this Snack!" class="btn" data-bind="click:makeSuggestion">
             </form>
         </div>
     </div>
@@ -60,34 +60,52 @@
 
 @section scripts {
     <script type="text/javascript">
+
+        var createNew = function (model) {
+
+            $.ajax({
+                url: "https://api-snacks.nerderylabs.com/v1/snacks?ApiKey=da39f072-4eaa-43ef-abd0-9c6c51a7cdb2",
+                type: "POST",
+                data: JSON.stringify({ name: model.newSnackName(), location: model.newSnackLocation() }),
+                contentType: "application/json",
+                dataType: "json",
+                success: function (data) {
+                    console.log('post success : ', data);
+                }
+            });
+
+        };
+
+        var saveSuggestion = function (snack) {
+            console.log('save sugg : ', snack())
+            $.ajax({
+                url: "/api/SuggestionAPI",
+                type: "POST",
+                data: '"' + snack().id + '"',
+                contentType: "application/json",
+                dataType: "json",
+                success: function (data) {
+                    console.log('post success : ', data);
+                }
+            });
+
+        };
         
         var model = {
             snackOptions: ko.observableArray([]),
             selectedOptional : ko.observable([]),
             newSnackName: ko.observable(''),
             newSnackLocation: ko.observable(''),
-            createNew: function () {
-
-                console.log("submiting... ", this.newSnackName());
-
-                $.ajax({
-                    url: "https://api-snacks.nerderylabs.com/v1/snacks?ApiKey=da39f072-4eaa-43ef-abd0-9c6c51a7cdb2",
-                    type: "POST",
-                    data: JSON.stringify({ name: this.newSnackName(), location: this.newSnackLocation() }),
-                    contentType: "application/json",
-                    dataType: "json",
-                    success : function(data)
-                    {
-                        console.log('post success : ', data);
-                    }
-                });
-
-                //$.post("https://api-snacks.nerderylabs.com/v1/snacks?ApiKey=da39f072-4eaa-43ef-abd0-9c6c51a7cdb2",
-                //    { "name": this.newSnackName(), "location": this.newSnackLocation() },
-                //    function (data) {
-                        
-                //    },
-                //    'json');
+            makeSuggestion: function () {
+                if (this.newSnackName().length > 0 && this.newSnackLocation().length > 0) {
+                    //create new
+                    createNew(this);
+                    //window.location.replace("/");
+                }
+                else {
+                    saveSuggestion(this.selectedOptional);
+                    //window.location.replace("/");
+                }
             }
         };
             

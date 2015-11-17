@@ -27,10 +27,19 @@ namespace SnaFoo.Controllers
             }
         }
 
-        //// POST: api/SuggestionAPI
-        //public void Post([FromBody]string value)
-        //{
-        //}
+        // POST: api/SuggestionAPI
+        public void Post([FromBody]string value)
+        {
+            using (var obj = new SnaFoo.natEntities())
+            {
+                var suggestion = new Suggestion();
+                suggestion.SnackId = Int32.Parse(value);
+                suggestion.SuggestedOn = DateTime.Now;
+
+                obj.Suggestions.Add(suggestion);
+                obj.SaveChanges();
+            }
+        }
 
         //// PUT: api/SuggestionAPI/5
         //public void Put(int id, [FromBody]string value)

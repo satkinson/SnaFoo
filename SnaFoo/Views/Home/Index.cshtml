@@ -113,7 +113,7 @@
                     if (!snacks[i].optional) {
                         self.alwaysOrdered.push(snacks[i]);
                     }
-                    else {
+                    else if (_.where(suggestions, { SnackId : snacks[i].id }).length > 0) { //snack has been suggested
                         // TODO : add restriction that will only add item if it is suggested for the next month (so that only items for next
                         //month can be added to the vote list.
                         
