@@ -64,7 +64,13 @@
             console.log('data loaded : ', data);
 
             var model = {
-                snackOptions : ko.observableArray(data)
+                snackOptions: ko.observableArray([])
+            };
+
+            for (var i = 0; i < data.length; i++) {
+                if (data[i].optional) {
+                    model.snackOptions.push(data[i]);
+                }
             }
 
             ko.applyBindings(model);
