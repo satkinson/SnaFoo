@@ -51,7 +51,7 @@
                     <tbody data-bind="foreach: optionalOrdered">
                         <tr>
                             <td data-bind="text:name"></td>
-                            <td data-bind="">0</td>
+                            <td data-bind="text:voteCount">0</td>
                             <td>
                                 <button class="btn btn_clear" data-bind="click:$parent.vote">
                                     <i class="icon-check icon-check_voted"></i>
@@ -116,6 +116,8 @@
                     else {
                         // TODO : add restriction that will only add item if it is suggested for the next month (so that only items for next
                         //month can be added to the vote list.
+                        
+                        snacks[i].voteCount = _.where(votes, { SnackId: snacks[i].id }).length; //TODO: only count votes fr the month being displayed
                         self.optionalOrdered.push(snacks[i]);
                     }
                 }
