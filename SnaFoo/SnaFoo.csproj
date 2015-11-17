@@ -143,6 +143,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ShoppingListController.cs" />
     <Compile Include="Controllers\SuggestionAPIController.cs" />
     <Compile Include="Controllers\SuggestionController.cs" />
     <Compile Include="Controllers\VoteAPIController.cs" />
@@ -268,6 +269,7 @@
       <DependentUpon>Suggestion.edmx</DependentUpon>
     </Content>
     <Content Include="Scripts\underscore-min.map" />
+    <Content Include="Views\ShoppingList\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
