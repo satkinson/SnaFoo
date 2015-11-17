@@ -68,22 +68,33 @@
 
 @section scripts {
     <script type="text/javascript">
-        $.getJSON("https://api-snacks.nerderylabs.com/v1/snacks?ApiKey=da39f072-4eaa-43ef-abd0-9c6c51a7cdb2", function (data) {
-            console.log('data loaded : ', data);
+
+        $.when(
+
+            $.getJSON("https://api-snacks.nerderylabs.com/v1/snacks?ApiKey=da39f072-4eaa-43ef-abd0-9c6c51a7cdb2"),
+            $.getJSON("/api/SuggestionAPI")
             
+        ).done(function (result1, result2) {
+            
+            console.log('data loaded : ', result1);
+            console.log('suggestions : ', result2);
+
+            var snacks = result1[0];
+            var suggestions = result2[0];
+
             var model = {
                 alwaysOrdered: ko.observableArray([]),
                 optionalOrdered : ko.observableArray([])
             };
 
-            for (var i = 0; i < data.length; i++) {
-                if (!data[i].optional) {
-                    model.alwaysOrdered.push(data[i]);
+            for (var i = 0; i < snacks.length; i++) {
+                if (!snacks[i].optional) {
+                    model.alwaysOrdered.push(snacks[i]);
                 }
                 else {
                     // TODO : add restriction that will only add item if it is suggested for the next month (so that only items for next
                     //month can be added to the vote list.
-                    model.optionalOrdered.push(data[i]);
+                    //if (suggestions)
                 }
             }
 
