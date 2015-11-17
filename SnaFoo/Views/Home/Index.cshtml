@@ -28,12 +28,8 @@
             <div class="shelf">
                 <h2 class="hdg hdg_2 mix-hdg_centered ">Snacks Always Purchased</h2>
             </div>
-            <ul class="list list_centered">
-                <li>Pop Tarts</li>
-                <li>Bagels</li>
-                <li>Ramen Noodles</li>
-                <li>Cereal</li>
-                <li>Trail Mix</li>
+            <ul class="list list_centered" data-bind="foreach: alwaysOrdered">
+                <li data-bind="text: name"></li>
             </ul>
         </div>
     </div>
@@ -52,46 +48,16 @@
                             <th scope="col">Last Date Purchased</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody data-bind="foreach: optionalOrdered">
                         <tr>
-                            <td>Donuts</td>
-                            <td>26</td>
+                            <td data-bind="text:name"></td>
+                            <td data-bind="text:id"></td>
                             <td>
                                 <button class="btn btn_clear">
                                     <i class="icon-check icon-check_voted"></i>
                                 </button>
                             </td>
-                            <td>12/1/14</td>
-                        </tr>
-                        <tr>
-                            <td>Spam</td>
-                            <td>10</td>
-                            <td>
-                                <button class="btn btn_clear">
-                                    <i class="icon-check icon-check_noVote"></i>
-                                </button>
-                            </td>
-                            <td>12/1/14</td>
-                        </tr>
-                        <tr>
-                            <td>Buckets of M&amp;M's</td>
-                            <td>38</td>
-                            <td>
-                                <button class="btn btn_clear">
-                                    <i class="icon-check icon-check_noVote"></i>
-                                </button>
-                            </td>
-                            <td>12/1/14</td>
-                        </tr>
-                        <tr>
-                            <td>Pistachios</td>
-                            <td>5</td>
-                            <td>
-                                <button class="btn btn_clear">
-                                    <i class="icon-check icon-check_noVote"></i>
-                                </button>
-                            </td>
-                            <td>10/1/14</td>
+                            <td data-bind="text: lastPurchaseDate"></td>
                         </tr>
                     </tbody>
                 </table>
@@ -99,3 +65,27 @@
         </div>
     </div>
 </div>
+
+@section scripts {
+    <script type="text/javascript">
+        $.getJSON("https://api-snacks.nerderylabs.com/v1/snacks?ApiKey=da39f072-4eaa-43ef-abd0-9c6c51a7cdb2", function (data) {
+            console.log('data loaded : ', data);
+            
+            var model = {
+                alwaysOrdered: ko.observableArray([]),
+                optionalOrdered : ko.observableArray([])
+            };
+
+            for (var i = 0; i < data.length; i++) {
+                if (!data[i].optional) {
+                    model.alwaysOrdered.push(data[i]);
+                }
+                else {
+                    model.optionalOrdered.push(data[i]);
+                }
+            }
+
+            ko.applyBindings(model);
+        })
+    </script>
+}

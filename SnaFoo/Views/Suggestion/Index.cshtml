@@ -25,11 +25,13 @@
                                 <h2 class="hdg hdg_2">Select a snack from the list</h2>
                             </label>
                         </div>
-                        <select name="snackOptions" id="snackOptions">
-                            <option value="snack1">snack suggestion 1</option>
-                            <option value="snack2">snack suggestion 2</option>
-                            <option value="snack3">snack suggestion 3</option>
-                            <option value="snack4">snack suggestion 4</option>
+
+                        <select name="snackOptions" id="snackOptions" data-bind="
+                                options: snackOptions,
+                                optionsText: 'name',
+                                value: id,
+                                optionsCaption: 'Choose a Snack...'
+                                 ">
                         </select>
                     </div>
                 </fieldset>
@@ -58,7 +60,15 @@
 
 @section scripts {
     <script type="text/javascript">
+        $.getJSON("https://api-snacks.nerderylabs.com/v1/snacks?ApiKey=da39f072-4eaa-43ef-abd0-9c6c51a7cdb2", function (data) {
+            console.log('data loaded : ', data);
 
+            var model = {
+                snackOptions : ko.observableArray(data)
+            }
+
+            ko.applyBindings(model);
+        })
     </script>
 }
 
