@@ -51,9 +51,9 @@
                     <tbody data-bind="foreach: optionalOrdered">
                         <tr>
                             <td data-bind="text:name"></td>
-                            <td data-bind="text:id"></td>
+                            <td data-bind="">0</td>
                             <td>
-                                <button class="btn btn_clear">
+                                <button class="btn btn_clear" data-bind="click:$parent.vote">
                                     <i class="icon-check icon-check_voted"></i>
                                 </button>
                             </td>
@@ -69,36 +69,61 @@
 @section scripts {
     <script type="text/javascript">
 
-        $.when(
+        function viewModel() {
 
-            $.getJSON("https://api-snacks.nerderylabs.com/v1/snacks?ApiKey=da39f072-4eaa-43ef-abd0-9c6c51a7cdb2"),
-            $.getJSON("/api/SuggestionAPI")
-            
-        ).done(function (result1, result2) {
-            
-            console.log('data loaded : ', result1);
-            console.log('suggestions : ', result2);
+            var self = this;
 
-            var snacks = result1[0];
-            var suggestions = result2[0];
+            self.alwaysOrdered = ko.observableArray([]);
+            self.optionalOrdered = ko.observableArray([]);
 
-            var model = {
-                alwaysOrdered: ko.observableArray([]),
-                optionalOrdered : ko.observableArray([])
-            };
+            self.vote = function (snack) {
+                console.log('vote for snack : ', snack);
 
-            for (var i = 0; i < snacks.length; i++) {
-                if (!snacks[i].optional) {
-                    model.alwaysOrdered.push(snacks[i]);
-                }
-                else {
-                    // TODO : add restriction that will only add item if it is suggested for the next month (so that only items for next
-                    //month can be added to the vote list.
-                    model.optionalOrdered.push(snacks[i]);
-                }
+                $.ajax({
+                    url: "/api/VoteAPI",
+                    type: "POST",
+                    data: '"' + snack.id + '"',
+                    contentType: "application/json",
+                    dataType: "json",
+                    success: function (data) {
+                        console.log('post success : ', data);
+                    }
+                });
+
             }
 
-            ko.applyBindings(model);
-        })
+
+            $.when(
+
+                $.getJSON("https://api-snacks.nerderylabs.com/v1/snacks?ApiKey=da39f072-4eaa-43ef-abd0-9c6c51a7cdb2"),
+                $.getJSON("/api/SuggestionAPI"),
+                $.getJSON("/api/VoteAPI")
+            
+            ).done(function (result1, result2, result3) {
+            
+                console.log('data loaded : ', result1);
+                console.log('suggestions : ', result2);
+                console.log('votes : ', result3);
+
+                var snacks = result1[0];
+                var suggestions = result2[0];
+                var votes = result3[0];
+            
+                for (var i = 0; i < snacks.length; i++) {
+                    if (!snacks[i].optional) {
+                        self.alwaysOrdered.push(snacks[i]);
+                    }
+                    else {
+                        // TODO : add restriction that will only add item if it is suggested for the next month (so that only items for next
+                        //month can be added to the vote list.
+                        self.optionalOrdered.push(snacks[i]);
+                    }
+                }
+
+            })
+
+        };
+
+        ko.applyBindings(new viewModel());
     </script>
 }

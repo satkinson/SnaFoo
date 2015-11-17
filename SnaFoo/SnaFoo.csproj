@@ -145,6 +145,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\SuggestionAPIController.cs" />
     <Compile Include="Controllers\SuggestionController.cs" />
+    <Compile Include="Controllers\VoteAPIController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
