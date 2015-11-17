@@ -58,7 +58,7 @@
                             <td data-bind="text:name"></td>
                             <td data-bind="text:voteCount">0</td>
                             <td>
-                                <button class="btn btn_clear" data-bind="click:$parent.vote">
+                                <button class="btn btn_clear" data-bind="click:$parent.vote"> <!-- add disabled when all votes used -->
                                     <i class="icon-check icon-check_voted"></i>
                                 </button>
                             </td>
@@ -117,21 +117,15 @@
             
             ).done(function (result1, result2, result3) {
             
-                console.log('data loaded : ', result1);
-                console.log('suggestions : ', result2);
-                console.log('votes : ', result3);
-
                 var snacks = result1[0];
                 var suggestions = result2[0];
                 var votes = result3[0];
 
                 var rawvotedIds = $.cookie("natVotes");
-                console.log('natvotes : ', rawvotedIds);
                 var voteIds = [];
                 if (rawvotedIds && rawvotedIds.length > 0)
                 {
                     voteIds = rawvotedIds.split(',');
-                    console.log('voteids : ', voteIds)
                     self.numOfVotes(3 - voteIds.length);
                 }
             
