@@ -230,6 +230,10 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\underscore-ko-1.6.0.js" />
+    <Content Include="Scripts\underscore-ko-1.6.0.min.js" />
+    <Content Include="Scripts\underscore-min.js" />
+    <Content Include="Scripts\underscore.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Suggestion.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -263,6 +267,7 @@
     <Content Include="Suggestion.edmx.diagram">
       <DependentUpon>Suggestion.edmx</DependentUpon>
     </Content>
+    <Content Include="Scripts\underscore-min.map" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

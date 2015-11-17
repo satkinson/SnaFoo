@@ -24,7 +24,9 @@ namespace SnaFoo
                       "~/Scripts/respond.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/knockout").Include(
-                    "~/Scripts/knockout-3.3.0.js"
+                    "~/Scripts/knockout-3.3.0.js",
+                    "~/Scripts/underscore.js",
+                    "~/Scripts/underscore-ko-1.6.0.js"
                 ));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
